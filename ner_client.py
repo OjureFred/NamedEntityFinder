@@ -7,4 +7,18 @@ class NamedEntityClient:
 
     def get_ents(self, sentence):
         doc = self.model(sentence)
-        return {}
+        entities = [{'ent': ent.text, 'label': self.map_label(ent.label_)}
+                    for ent in doc.ents]
+        return {'ents': entities, 'html': ''}
+
+    @staticmethod
+    def map_label(label):
+        label_map = {
+            'PERSON': 'Person',
+            'NORP': 'Group',
+            'LOC': 'Location',
+            'ASL': 'Language',
+            'Australia': 'GPE'
+        }
+
+        return label_map.get(label)
